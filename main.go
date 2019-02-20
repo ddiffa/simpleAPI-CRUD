@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -20,21 +21,56 @@ type Author struct {
 	LastName string `json:"lastname"`
 }
 
+// Init books
+var books []Book
+
+func getBooks(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type","application/json")
+	json.NewEncoder(w).Encode(books)
+}
+
 func getBook(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	// Loop through books and find with id
+
+	for _, item := range books{
+		if item.ID == params["id"] {
+			json.NewEncoder(w).Encode(item)
+			return
+		}
+	}
+	json.NewEncoder(w).Encode(books)
+}
+
+func createBook(w http.ResponseWriter, r *http.Request){
 
 }
 
+func updateBook(w http.ResponseWriter, r *http.Request){
+
+}
+
+func deleteBooks(w http.ResponseWriter, r *http.Request){
+
+}
 
 
 
 func main(){
 	r:= mux.NewRouter()
 
-	r.Handle("/api/books",getBooks).Methods("GET")
-	r.Handle("/api/books/{id}",getBooks).Methods("GET")
-	r.Handle("/api/books",createBook).Methods("POST")
-	r.Handle("/api/books/{id}",updateBook).Methods("PUT")
-	r.Handle("/api/books/{id}",deleteBooks).Methods("DELETE")
+	//Data Example - @Todo implement Databases
+	books = append(books,
+		Book{ID:"1",Title:"Bumi",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123001"},
+		Book{ID:"2",Title:"Bulan",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123002"},
+		Book{ID:"3",Title:"Matahari",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123003"})
+	r.HandleFunc("/api/books",getBooks).Methods("GET")
+	r.HandleFunc("/api/books/{id}",getBook).Methods("GET")
+	r.HandleFunc("/api/books",createBook).Methods("POST")
+	r.HandleFunc("/api/books/{id}",updateBook).Methods("PUT")
+	r.HandleFunc("/api/books/{id}",deleteBooks).Methods("DELETE")
 	log.Fatal(http.ListenAndServe(":8000",r))
 
 }
