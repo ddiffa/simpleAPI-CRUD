@@ -94,9 +94,9 @@ func main(){
 
 	//Data Example - @Todo implement Databases
 	books = append(books,
-		Book{ID:"1",Title:"Bumi",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123001"},
-		Book{ID:"2",Title:"Bulan",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123002"},
-		Book{ID:"3",Title:"Matahari",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123003"})
+		Book{ID:"1",Title:"Bumi",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123001",Description:"Tentang Bumi"},
+		Book{ID:"2",Title:"Bulan",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123002",Description:"Tentang Bulan"},
+		Book{ID:"3",Title:"Matahari",Author: &Author{FirstName:"Tere",LastName:"Liye"},Code:"123003",Description:"Tentang Matahari"})
 	r.HandleFunc("/api/books",getBooks).Methods("GET")
 	r.HandleFunc("/api/books/{id}",getBook).Methods("GET")
 	r.HandleFunc("/api/books",createBook).Methods("POST")
